@@ -16,15 +16,22 @@ angular.module('memefy.directives', [])
     },
     */
     templateUrl: 'partials/navigation.html',
-    controller: function($scope, $element, $attrs) {
+    controller: function($scope, $element, $attrs, Meme) {
       $scope.leftNavigation = function() {
-        console.log("left navigation click");
-        $scope.clickLeftNavigation($scope, Meme);
+        Meme.clickLeftNavigation();
+        $scope.updateScope();
       }
 
       $scope.rightNavigation = function() {
-        console.log("right navigation click");
-        $scope.clickRightNavigation();
+        Meme.clickRightNavigation();
+        $scope.updateScope();
+      }
+
+      $scope.updateScope = function() {
+        $scope.memes = Meme.getMemes();
+        $scope.meme = Meme.getMeme();
+        $scope.showRightNavigation = Meme.showRightNavigation();
+        $scope.showLeftNavigation = Meme.showLeftNavigation();
       }
     }
   };

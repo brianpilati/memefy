@@ -32,7 +32,7 @@ describe('controllers', function() {
       expect(scope.meme).toBe(undefined);
     });
   });
-
+/*
   describe('navigationClick', function() {
     var loader, memeFactory, memes, newMeme;
 
@@ -74,4 +74,5 @@ describe('controllers', function() {
       expect(memeFactory.showRightNavigation()).toBe(true);
     });
  });
+  */
 });

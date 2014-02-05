@@ -3,9 +3,9 @@
 /* jasmine specs for directives go here */
 
 describe('directives', function() {
-  beforeEach(module('memefy.directives', 'app/partials/navigation.html', 'memefy.controllers', 'memefy.services'));
+  beforeEach(module('memefy.directives', 'app/partials/navigation.html', 'memefy.services'));
 
-  var scope, element, template;
+  var scope, element, template, meme;
 
   beforeEach(function() {
     this.addMatchers({
@@ -30,8 +30,9 @@ describe('directives', function() {
       expect(element.find('div').hasClass('ng-hide')).toBe(true);
       expect(element.find('div').next().hasClass('rightNavigation')).toBe(true);
       expect(element.find('div').next().hasClass('ng-hide')).toBe(true);
-      console.log(element.find('div')[0].click());
-      console.log(element.attr('show'));
+
+      element.find('div')[0].click();
+      element.attr('show');
     }));
   });
 });
