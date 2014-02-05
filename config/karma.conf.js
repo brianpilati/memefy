@@ -7,7 +7,8 @@ module.exports = function(config){
       'app/lib/angular/angular-*.js',
       'test/lib/angular/angular-mocks.js',
       'app/js/**/*.js',
-      'test/unit/**/*.js'
+      'test/unit/**/*.js',
+      'app/partials/*.html'
     ],
 
     exclude : [
@@ -23,6 +24,7 @@ module.exports = function(config){
     browsers : ['Chrome'],
 
     plugins : [
+            'karma-ng-html2js-preprocessor',
             'karma-junit-reporter',
             'karma-chrome-launcher',
             'karma-firefox-launcher',
@@ -32,6 +34,9 @@ module.exports = function(config){
     junitReporter : {
       outputFile: 'test_out/unit.xml',
       suite: 'unit'
-    }
+    },
 
+    preprocessors : {
+      'app/partials/*.html': 'html2js'
+    }
 })}

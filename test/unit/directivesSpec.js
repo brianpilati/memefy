@@ -3,17 +3,35 @@
 /* jasmine specs for directives go here */
 
 describe('directives', function() {
-  beforeEach(module('memefy.directives'));
+  beforeEach(module('memefy.directives', 'app/partials/navigation.html', 'memefy.controllers', 'memefy.services'));
 
-  describe('app-version', function() {
-    it('should print current version', function() {
-      module(function($provide) {
-        $provide.value('version', 'TEST_VER');
-      });
-      inject(function($compile, $rootScope) {
-        var element = $compile('<span app-version></span>')($rootScope);
-        expect(element.text()).toEqual('TEST_VER');
-      });
+  var scope, element, template;
+
+  beforeEach(function() {
+    this.addMatchers({
+      toEqualData: function(expected) {
+        return angular.equals(this.actual, expected);
+      }
     });
+  });
+
+  describe('navigationButtons', function() {
+    beforeEach(inject(function($compile, $rootScope, $templateCache) {
+      template = $templateCache.get('app/partials/navigation.html');
+      $templateCache.put('partials/navigation.html', template);
+      scope = $rootScope;
+      element = angular.element('<navigation-buttons></navigation-buttons>');
+      $compile(element)($rootScope);
+    }));
+
+    it('should be replaced', inject(function(Meme) {
+      scope.$digest();
+      expect(element.find('div').hasClass('leftNavigation')).toBe(true);
+      expect(element.find('div').hasClass('ng-hide')).toBe(true);
+      expect(element.find('div').next().hasClass('rightNavigation')).toBe(true);
+      expect(element.find('div').next().hasClass('ng-hide')).toBe(true);
+      console.log(element.find('div')[0].click());
+      console.log(element.attr('show'));
+    }));
   });
 });

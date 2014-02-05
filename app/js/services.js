@@ -11,17 +11,22 @@ services.factory('Meme', [ function() {
   var _memes = undefined;
   var _memeDisplayCount = 7;
   var _currentMemeCounter = 0;
-
+  var _currentMemeIndex = 0;
 
   return {
 
     setMemes : function(memes) {
-      _memes = ((memes == 'null') ? undefined : [memes]);
+      _memes = ((memes == 'null') ? []: memes);
+    },
+
+    addMeme: function(meme) {
+      _currentMemeIndex = this._getTotalMemesLength();
+      _memes.push(meme);
     },
 
     getMemes: function() {
       if (this.isAvailableMemes()) {
-        var lowerBound = _currentMemeCounter;
+        var lowerBound = this._getLowerBound();
         var upperBound = this._getUpperBound();
         return _memes.slice(lowerBound, upperBound);
       } else {
@@ -29,34 +34,34 @@ services.factory('Meme', [ function() {
       }
     },
 
-    getMeme: function(index) {
-      if (this._isIndexValid(index)) {
-        return _memes[index];
+    getMeme: function() {
+      if (this._isIndexValid(_currentMemeIndex)) {
+        return _memes[_currentMemeIndex];
       } else {
         return undefined;
       }
     },
 
     clickRightNavigation : function() {
-      if (this.showRightNaviation()) {
+      if (this.showRightNavigation()) {
         _currentMemeCounter++;  
       }
       return this.getMemes();
     },
 
     clickLeftNavigation : function() {
-      if (_currentMemeCounter > 0) {
+      if (this.showLeftNavigation()) {
         _currentMemeCounter--;  
       }
       return this.getMemes();
     },
 
     showRightNavigation : function () {
-      return ((this.getMemes() && this.getMemes().length > this._getNextCounter()) ? true : false);
+      return ((this.getMemes() && this._getTotalMemesLength() > this._getNextCounter()) ? true : false);
     },
 
     showLeftNavigation : function () {
-      return ((this.getMemes() && this.getMemes().length && _currentMemeCounter > 0) ? true : false);
+      return ((this.getMemes() && this._getTotalMemesLength() && _currentMemeCounter > 0) ? true : false);
     },
 
     isAvailableMemes : function() {
@@ -64,39 +69,31 @@ services.factory('Meme', [ function() {
     },
     
     _isIndexValid : function(index) {
-      return (this.isAvailableMemes() && index < _memes.length && index > -1);
+      return (this.isAvailableMemes() && index < this._getTotalMemesLength() && index > -1);
     },
 
     _getNextCounter: function() {
       return (_currentMemeCounter + 1) * _memeDisplayCount;
     },
 
+    _getCurrentCounter: function() {
+      return _currentMemeCounter * _memeDisplayCount;
+    },
+
+    _getLowerBound: function() {
+      return this._getCurrentCounter();
+    },
+
     _getUpperBound: function() {
       var estimatedUpperBound = this._getNextCounter();
-      return ((_memes.length > estimatedUpperBound) ? estimatedUpperBound : _memes.length);
+      return ((this._getTotalMemesLength() > estimatedUpperBound) ? estimatedUpperBound : this._getTotalMemesLength());
+    },
+
+    _getTotalMemesLength: function() {
+      return _memes.length;
     }
   };
 }]);
-
-/*
-services.factory('DareTest', ['$resource', function($resource) {
-  return $resource('/services/dareTest/:id', {id: '@id'}, 
-    {put: {method: 'PUT', params: {id: '@id'}}}
-  );  
-}]);
-
-services.factory('GetCustomer', ['Customer', '$route', '$q', function(Customer, $route, $q) {
-  return function() {
-    var delay = $q.defer();
-    Customer.get({id: $route.current.params.customerId}, function(customer) {
-      delay.resolve(customer);
-    }, function() {
-      delay.reject('Unable to fetch customer ' + $route.current.params.customerId);
-    }); 
-    return delay.promise;
-  };  
-}]);
-*/
 
 services.factory('GetAllMemes', ['$q', '$http', '$route', 'Meme', function($q, $http, $route, Meme) {
   return function() {
@@ -111,6 +108,26 @@ services.factory('GetAllMemes', ['$q', '$http', '$route', 'Meme', function($q, $
       delay.resolve(Meme);
     }).error(function(data, status, headers, config) {
         delay.reject('Unable to fetch memes');
+    });
+
+    return delay.promise;
+  }
+}]);
+
+services.factory('persistMeme', ['$q', '$http', 'Meme', function($q, $http, Meme) {
+  return function(memeId, newMeme) {
+    var delay= $q.defer();
+    $http (
+      {
+        method: 'POST', 
+        url: "https://memefy.firebaseio.com/memes/" + memeId + ".json",
+        data: newMeme
+      }
+    ).success(function(data, status, headers, config) {
+      Meme.addMeme(data);
+      delay.resolve(Meme);
+    }).error(function(data, status, headers, config) {
+        delay.reject('Unable to push memes');
     });
 
     return delay.promise;
