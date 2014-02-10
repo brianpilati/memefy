@@ -4,17 +4,11 @@
 
 
 angular.module('memefy.directives', [])
-.directive('navigationButtons', ['Meme', function(Meme) {
+.directive('mfNavigationButtons', ['Meme', function(Meme) {
   return {
     restrict: 'E',
     replace: true,
     transclude: false,
-    /*
-    scope: {
-      rightNavigation: '@=rightNavigation',
-      leftNavigation: '@=leftNavigation'
-    },
-    */
     templateUrl: 'partials/navigation.html',
     controller: function($scope, $element, $attrs, Meme) {
       $scope.leftNavigation = function() {
@@ -35,4 +29,20 @@ angular.module('memefy.directives', [])
       }
     }
   };
+}])
+.directive('mfMemeTypesDisplay', [function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    transclude: false,
+    templateUrl: 'partials/displayType.html',
+  }
+}])
+.directive('mfMemeDisplay', [function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    transclude: false,
+    templateUrl: 'partials/displayMeme.html'
+  }
 }]);

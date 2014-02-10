@@ -11,7 +11,16 @@ angular.module('memefy', [
   'memefy.controllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/', {
+  $routeProvider.when('/displayMemes/:memeId', {
+    templateUrl: 'partials/displayMemes.html', 
+    controller: 'displayMemesByType',
+    resolve: {
+      memeFactory: function(GetAllMemesByType) {
+        return GetAllMemesByType();
+      }
+    }
+  })
+  .when('/display', {
     templateUrl: 'partials/display.html', 
     controller: 'displayMemes',
     resolve: {
@@ -20,7 +29,11 @@ config(['$routeProvider', function($routeProvider) {
       }
     }
   })
+  .when('/create', {
+    templateUrl: 'partials/create.html', 
+    controller: 'createMeme'
+  })
   .otherwise({
-    redirectTo: '/'
+    redirectTo: '/display'
   });
 }]);

@@ -8,15 +8,27 @@
 var services = angular.module('memefy.services', ['ngResource', 'ngRoute']);
 
 services.factory('Meme', [ function() {
-  var _memes = undefined;
+  var _memes = [];
   var _memeDisplayCount = 7;
   var _currentMemeCounter = 0;
   var _currentMemeIndex = 0;
+  var _imageId = undefined;
 
   return {
 
     setMemes : function(memes) {
-      _memes = ((memes == 'null') ? []: memes);
+      var self = this;
+      if (memes != 'null') {
+        _memes = 
+        _.first(
+          _.map(memes, function(memeIdentifier, key) { 
+            self._setImageId(key);
+            return _.map(memeIdentifier, function(meme, key) { 
+              return meme; 
+            })
+          })
+        );
+      }
     },
 
     addMeme: function(meme) {
@@ -40,6 +52,10 @@ services.factory('Meme', [ function() {
       } else {
         return undefined;
       }
+    },
+
+    getImageId: function() {
+      return (_imageId ? _imageId + ".jpg" : _imageId);
     },
 
     clickRightNavigation : function() {
@@ -67,7 +83,11 @@ services.factory('Meme', [ function() {
     isAvailableMemes : function() {
       return ((_memes && _memes.length) ? true : false);
     },
-    
+
+    _setImageId: function(imageId) {
+      _imageId = imageId;
+    },
+
     _isIndexValid : function(index) {
       return (this.isAvailableMemes() && index < this._getTotalMemesLength() && index > -1);
     },
@@ -95,17 +115,17 @@ services.factory('Meme', [ function() {
   };
 }]);
 
-services.factory('GetAllMemes', ['$q', '$http', '$route', 'Meme', function($q, $http, $route, Meme) {
+services.factory('GetAllMemes', ['$q', '$http', function($q, $http) {
   return function() {
     var delay= $q.defer();
     $http (
       {
         method: 'GET', 
-        url: "https://memefy.firebaseio.com/memes/" + $route.current.params.memeId + ".json" 
+        url: "https://memefy.firebaseio.com/memes.json" 
       }
     ).success(function(data, status, headers, config) {
-      Meme.setMemes(data);
-      delay.resolve(Meme);
+      var returnData = (data == "null" ? undefined : _.map(data, function(num, key){ return key; }));
+      delay.resolve(returnData);
     }).error(function(data, status, headers, config) {
         delay.reject('Unable to fetch memes');
     });
@@ -114,7 +134,27 @@ services.factory('GetAllMemes', ['$q', '$http', '$route', 'Meme', function($q, $
   }
 }]);
 
-services.factory('persistMeme', ['$q', '$http', 'Meme', function($q, $http, Meme) {
+services.factory('GetAllMemesByType', ['$q', '$http', '$route', 'Meme', function($q, $http, $route, Meme) {
+  return function() {
+    var delay= $q.defer();
+    var memeId = $route.current.params.memeId;
+    $http (
+      {
+        method: 'GET', 
+        url: "https://memefy.firebaseio.com/memes/" + memeId + ".json" 
+      }
+    ).success(function(data, status, headers, config) {
+      Meme.setMemes(data);
+      delay.resolve(Meme);
+    }).error(function(data, status, headers, config) {
+        delay.reject('Unable to fetch memes by type');
+    });
+
+    return delay.promise;
+  }
+}]);
+
+services.factory('PersistMeme', ['$q', '$http', 'Meme', function($q, $http, Meme) {
   return function(memeId, newMeme) {
     var delay= $q.defer();
     $http (
@@ -124,7 +164,7 @@ services.factory('persistMeme', ['$q', '$http', 'Meme', function($q, $http, Meme
         data: newMeme
       }
     ).success(function(data, status, headers, config) {
-      Meme.addMeme(data);
+      Meme.addMeme(newMeme);
       delay.resolve(Meme);
     }).error(function(data, status, headers, config) {
         delay.reject('Unable to push memes');

@@ -5,7 +5,7 @@
 describe('controllers', function() {
   beforeEach(module('memefy.controllers', 'memefy.services'));
 
-  var scope, ctrl;
+  var scope, ctrl, location;
   beforeEach(function() {
     this.addMatchers({
       toEqualData: function(expected) {
@@ -14,14 +14,14 @@ describe('controllers', function() {
     });
   });
 
-  describe('displayMemes', function() {
+  describe('displayMemesByType', function() {
     var loader, meme;
 
     beforeEach(inject(function($controller, $rootScope, Meme) {
       scope = $rootScope.$new();
       meme = Meme;
       meme.setMemes('null');
-      ctrl = $controller('displayMemes', { $scope: scope, 'memeFactory' : meme});
+      ctrl = $controller('displayMemesByType', { $scope: scope, 'memeFactory' : meme});
     }));
 
     it('should load no memes', function() {
@@ -32,47 +32,66 @@ describe('controllers', function() {
       expect(scope.meme).toBe(undefined);
     });
   });
-/*
-  describe('navigationClick', function() {
-    var loader, memeFactory, memes, newMeme;
 
-    beforeEach(inject(function($controller, $rootScope, Meme) {
+  describe('displayMemes', function() {
+    var loader, memes, location;
+
+    beforeEach(inject(function($controller, $rootScope, $location) {
       scope = $rootScope.$new();
-      memes = [
-        {lineOne: "1", lineTwo: "2"},
-        {lineOne: "3", lineTwo: "4"},
-        {lineOne: "5", lineTwo: "6"},
-        {lineOne: "7", lineTwo: "8"},
-        {lineOne: "9", lineTwo: "10"},
-        {lineOne: "11", lineTwo: "12"},
-        {lineOne: "13", lineTwo: "14"}
-      ];
-      newMeme = {lineOne: "15", lineTwo: "16"};
-      memes.push(newMeme);
-      memeFactory = Meme;
-      memeFactory.setMemes(memes);
-      ctrl = $controller('navigationClick', { $scope: scope, 'memeFactory' : memeFactory});
+      location = $location;
+      memes = undefined;
+      ctrl = $controller('displayMemes', { $scope: scope, $location: location, 'memes' : memes});
     }));
 
-    it('should load one meme after right click', function() {
-      expect(scope.memes).toEqualData(undefined);
-      scope.clickRightNavigation();
-      expect(scope.memes).toEqualData([newMeme]);
-      expect(memeFactory.showLeftNavigation()).toBe(true);
-      expect(memeFactory.showRightNavigation()).toBe(false);
+    it('should redirect to the create page', function() {
+      expect(location.path()).toBe('/create');
     });
+  });
 
-    it('should load all memes after left click', function() {
-      expect(scope.memes).toEqualData(undefined);
-      scope.clickRightNavigation();
-      expect(scope.memes).toEqualData([newMeme]);
-      expect(memeFactory.showLeftNavigation()).toBe(true);
-      expect(memeFactory.showRightNavigation()).toBe(false);
-      scope.clickLeftNavigation();
-      expect(scope.memes).toEqualData(memes.slice(0,7));
-      expect(memeFactory.showLeftNavigation()).toBe(false);
-      expect(memeFactory.showRightNavigation()).toBe(true);
+  describe('displayMemes', function() {
+    var loader, memes, location;
+
+    beforeEach(inject(function($controller, $rootScope, $location) {
+      scope = $rootScope.$new();
+      location = $location;
+      memes = ['dosEquis', 'burtReynolds'];
+      ctrl = $controller('displayMemes', { $scope: scope, $location: location, 'memes' : memes});
+    }));
+
+    it('should load memes', function() {
+      expect(location.path()).toBe('');
+      expect(scope.memeTypes).toBe(memes);
     });
- });
-  */
+  });
+
+  describe('createMeme', function() {
+    var loader, meme, location, mockBackend;
+
+    beforeEach(inject(function(_$httpBackend_, $controller, $rootScope, $location, PersistMeme, Meme) {
+      scope = $rootScope.$new();
+      location = $location;
+      mockBackend = _$httpBackend_;
+      loader = PersistMeme;
+      meme = Meme;
+      ctrl = $controller('createMeme', { $scope: scope, $location: location, 'PersistMeme' : loader});
+    }));
+
+    it('should persist a meme', function() {
+      mockBackend.expectPOST('https://memefy.firebaseio.com/memes/DosEquis.json').respond('null');
+
+      scope.memeId = 'DosEquis';
+      scope.user = '1234';
+      scope.firstLine = "I usually don't test my code ...";
+      scope.secondLine = "but when I do, it's in production";
+      scope.save();
+      expect(location.path()).toBe('');
+
+      mockBackend.flush();
+      expect(location.path()).toBe('/displayMemes/' + scope.memeId);
+
+      expect(meme.getMemes()).toEqualData([{'user': "1234", 'firstLine': "I usually don't test my code ...", 'secondLine': "but when I do, it's in production"}]);
+
+
+    });
+  });
 });

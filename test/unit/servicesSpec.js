@@ -40,20 +40,65 @@ describe('service', function() {
     it('should have no right navigation', function() {
       expect(memeFactory.showRightNavigation()).toBe(false);
     });
+
+    it('should have no memeImageId', function() {
+      expect(memeFactory.getImageId()).toBe(undefined);
+    });
   });
 
-  describe('persistMeme', function() {
-    var mockBackend, loader, memeFactory;
-    beforeEach(inject(function(_$httpBackend_, persistMeme, Meme) {
+  describe('GetAllMemes', function() {
+    var mockBackend, loader;
+    beforeEach(inject(function(_$httpBackend_, GetAllMemes) {
       mockBackend = _$httpBackend_;
-      loader = persistMeme;
+      loader = GetAllMemes;
+    }));
+   
+    it('should load no memes', function() {
+      mockBackend.expectGET('https://memefy.firebaseio.com/memes.json').respond('null');
+ 
+      var memes;
+      var promise = loader();
+      promise.then(function(_memes) {
+        memes = _memes;
+      });
+ 
+      expect(memes).toBeUndefined();
+ 
+      mockBackend.flush();
+ 
+      expect(memes).toBe(undefined);
+    });
+
+    it('should load memes', function() {
+      var returnMemes = {"DosEquis":{"-JFSOZT0vfPTc381tAsU":{"user":"9101","lineTwo":"6","lineOne":"5"},"-JFSOMEkprqcmHxOd2zd":{"user":"1234","lineTwo":"2","lineOne":"1"}},"BurtReynolds":{"-JFSOnHTnEWKGTbxU4Yv":{"user":"5678","lineTwo":"4","lineOne":"3"}}};
+      mockBackend.expectGET('https://memefy.firebaseio.com/memes.json').respond(returnMemes);
+ 
+      var memes;
+      var promise = loader();
+      promise.then(function(_memes) {
+        memes = _memes;
+      });
+ 
+      expect(memes).toBeUndefined();
+ 
+      mockBackend.flush();
+ 
+      expect(memes).toEqualData(['DosEquis', 'BurtReynolds']);
+   });
+  });
+
+  describe('PersistMeme', function() {
+    var mockBackend, loader, memeFactory;
+    beforeEach(inject(function(_$httpBackend_, PersistMeme, Meme) {
+      mockBackend = _$httpBackend_;
+      loader = PersistMeme;
       memeFactory = Meme;
       memeFactory.setMemes('null');
     }));
    
     it('should add one meme', function() {
       var meme = {lineOne: "I usually don't test my code", lineTwo: "but when I do it is in production"};
-      var memeId = "dosEquis";
+      var memeId = "DosEquis";
       
       mockBackend.expectPOST('https://memefy.firebaseio.com/memes/' + memeId + '.json').respond(meme);
  
@@ -72,24 +117,29 @@ describe('service', function() {
     });
   });
 
-  describe('persistMeme', function() {
-    var mockBackend, loader, memeFactory, memes, meme, memeId, promise;
-    beforeEach(inject(function(_$httpBackend_, persistMeme, Meme) {
+  describe('PersistMeme', function() {
+    var mockBackend, loader, memeFactory, memes, meme, memeId, promise, expectedMemes;
+    beforeEach(inject(function(_$httpBackend_, PersistMeme, Meme) {
       mockBackend = _$httpBackend_;
-      loader = persistMeme;
-      memes = [
-        {lineOne: "1", lineTwo: "2"},
-        {lineOne: "3", lineTwo: "4"},
-        {lineOne: "5", lineTwo: "6"},
-        {lineOne: "7", lineTwo: "8"},
-        {lineOne: "9", lineTwo: "10"},
-        {lineOne: "11", lineTwo: "12"},
-        {lineOne: "13", lineTwo: "14"}
-      ];
+      loader = PersistMeme;
+      memes = {
+        "DosEquis": {
+          "-adsfasdfasd1" : {lineOne: "1", lineTwo: "2"},
+          "-adsfasdfasd2" : {lineOne: "3", lineTwo: "4"},
+          "-adsfasdfasd3" : {lineOne: "5", lineTwo: "6"},
+          "-adsfasdfasd4" : {lineOne: "7", lineTwo: "8"},
+          "-adsfasdfasd5" : {lineOne: "9", lineTwo: "10"},
+          "-adsfasdfasd6" : {lineOne: "11", lineTwo: "12"},
+          "-adsfasdfasd7" : {lineOne: "13", lineTwo: "14"}
+        }
+      };
+
+      expectedMemes = [{lineOne: '1', lineTwo: '2'}, {lineOne: '3', lineTwo: '4'}, {lineOne: '5', lineTwo: '6'}, {lineOne: '7', lineTwo: '8'}, {lineOne: '9', lineTwo: '10'}, {lineOne: '11', lineTwo: '12'}, {lineOne: '13', lineTwo: '14'}];
+
       memeFactory = Meme;
       memeFactory.setMemes(memes);
       meme = {lineOne: "I usually don't test my code", lineTwo: "but when I do it is in production"};
-      memeId = "dosEquis";
+      memeId = "DosEquis";
       promise = loader(memeId, meme);
       promise.then(function(_memeFactory) {
         memeFactory = _memeFactory;
@@ -98,7 +148,7 @@ describe('service', function() {
     }));
    
     it('should add one meme', function() {
-      var displayMemes = memes.slice(0);
+      var displayMemes = expectedMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -109,7 +159,7 @@ describe('service', function() {
     });
 
     it('should browse right', function() {
-      var displayMemes = memes.slice(0);
+      var displayMemes = expectedMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -124,7 +174,7 @@ describe('service', function() {
     });
 
     it('should browse right only once', function() {
-      var displayMemes = memes.slice(0);
+      var displayMemes = expectedMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -143,7 +193,7 @@ describe('service', function() {
     });
 
     it('should browse left', function() {
-      var displayMemes = memes.slice(0);
+      var displayMemes = expectedMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -162,7 +212,7 @@ describe('service', function() {
     });
 
     it('should browse left only once', function() {
-      var displayMemes = memes.slice(0);
+      var displayMemes = expectedMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -185,18 +235,18 @@ describe('service', function() {
     });
   });
  
-  describe('GetAllMemes', function() {
+  describe('GetAllMemesByType', function() {
     var mockBackend, loader, route;
-    beforeEach(inject(function(_$httpBackend_, GetAllMemes, $route) {
+    beforeEach(inject(function(_$httpBackend_, GetAllMemesByType, $route) {
       mockBackend = _$httpBackend_;
-      loader = GetAllMemes;
+      loader = GetAllMemesByType;
       route = $route;
     }));
    
     it('should load no memes', function() {
       
-      mockBackend.expectGET('https://memefy.firebaseio.com/memes/dosEquis.json').respond('null');
-      route.current = {params : {memeId: 'dosEquis'}};
+      mockBackend.expectGET('https://memefy.firebaseio.com/memes/DosEquis.json').respond('null');
+      route.current = {params : {memeId: 'DosEquis'}};
  
       var memeFactory;
       var promise = loader();
@@ -209,6 +259,38 @@ describe('service', function() {
       mockBackend.flush();
  
       expect(memeFactory.getMemes()).toEqualData(undefined);
+      expect(memeFactory.getMeme()).toEqualData(undefined);
+      expect(memeFactory.getImageId()).toEqualData(undefined);
    });
  });
+
+  describe('GetAllMemesByType', function() {
+    var mockBackend, loader, route, memeFactory;
+    beforeEach(inject(function(_$httpBackend_, GetAllMemesByType, $route, Meme) {
+      mockBackend = _$httpBackend_;
+      loader = GetAllMemesByType;
+      route = $route;
+      memeFactory = Meme;
+    }));
+   
+    it('should load memes', function() {
+      var returnMemes = {"DosEquis":{"-JFSOZT0vfPTc381tAsU":{"user":"9101","lineTwo":"6","lineOne":"5"},"-JFSOMEkprqcmHxOd2zd":{"user":"1234","lineTwo":"2","lineOne":"1"}}};
+      var expectedMemes = [ { user : '9101', lineTwo : '6', lineOne : '5' }, { user : '1234', lineTwo : '2', lineOne : '1' } ];
+      
+      mockBackend.expectGET('https://memefy.firebaseio.com/memes/DosEquis.json').respond(returnMemes);
+      route.current = {params : {memeId: 'DosEquis'}};
+ 
+      var promise = loader();
+      promise.then(function(_memeFactory) {
+        memeFactory = _memeFactory;
+      });
+ 
+      mockBackend.flush();
+
+ 
+      expect(memeFactory.getMemes()).toEqualData(expectedMemes);
+      //expect(memeFactory.getMeme()).toEqualData(undefined);
+      //expect(memeFactory.getImageId()).toEqualData('DosEquis.jpg');
+    });
+  });
 });

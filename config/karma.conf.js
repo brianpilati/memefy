@@ -8,7 +8,10 @@ module.exports = function(config){
       'test/lib/angular/angular-mocks.js',
       'app/js/**/*.js',
       'test/unit/**/*.js',
-      'app/partials/*.html'
+      'app/partials/**/*.html',
+      'app/lib/jquery/jquery-1.11.0.min.js',
+      'app/lib/underscore/underscore-min.js',
+      {pattern: 'app/img/*.jpg', included: false, served: true}
     ],
 
     exclude : [
@@ -37,6 +40,6 @@ module.exports = function(config){
     },
 
     preprocessors : {
-      'app/partials/*.html': 'html2js'
+      'app/partials/**/*.html': 'html2js'
     }
 })}
