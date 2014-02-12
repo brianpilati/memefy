@@ -134,21 +134,53 @@ describe('directives', function() {
   });
 
   describe('mfMemeTypesDisplay', function() {
-    beforeEach(inject(function($compile, $rootScope, $templateCache, _$httpBackend_) {
+    var compile;
+    beforeEach(inject(function($compile, $rootScope, $templateCache) {
+      compile = $compile;
       template = $templateCache.get('app/partials/displayType.html');
       $templateCache.put('partials/displayType.html', template);
 
       scope = $rootScope.$new();
-      scope.memes = ['DosEquis', 'BurtReynolds'];
+      scope.memeTypes = globalMemeTypes;
 
-      element = angular.element("<div><mf-meme-types-display ng-Repeat='meme in memes'></mf-meme-types-display></div>");
+      element = angular.element("<div><mf-meme-types-display ng-Repeat='meme in memeTypes' view-class='memeDisplayTypeImage'></mf-meme-types-display></div>");
       $compile(element)(scope);
     }));
 
     it('should display the first meme', inject(function() {
       scope.$digest();
-      expect($($($(element).children('div')[0]).children('img')[0]).attr('src')).toBe('img/DosEquis.jpg');
-      expect($($($(element).children('div')[1]).children('img')[0]).attr('src')).toBe('img/BurtReynolds.jpg');
+      expect($($($(element).children('div')[0]).children('img')[0]).attr('src')).toBe('img/dosEquis.jpg');
+      expect($($($(element).children('div')[1]).children('img')[0]).attr('src')).toBe('img/burtReynolds.jpg');
+    }));
+
+    it('should have an isolate class', inject(function() {
+      scope.$digest();
+      expect($(element).children('div').hasClass('memeDisplayTypeImage')).toBe(true);;
+    }));
+
+    it('should display the title', inject(function() {
+      scope.$digest();
+
+      var currentElement = $($(element).children('div')[0])[0];
+      var newElement = compile(currentElement)(scope);
+      var directiveScope = newElement.scope();
+      directiveScope.memeMouseEnter();
+      directiveScope.$digest();
+      expect($($(currentElement).find('.memeHover')[0]).html()).toBe('Dos Equis');
+    }));
+
+    it('should remove the title', inject(function() {
+      scope.$digest();
+      var currentElement = $($(element).children('div')[0])[0];
+      var newElement = compile(currentElement)(scope);
+      var directiveScope = newElement.scope();
+      directiveScope.memeMouseEnter();
+      directiveScope.$digest();
+      expect($($(currentElement).find('.memeHover')[0]).html()).toBe('Dos Equis');
+
+      directiveScope.memeMouseLeave();
+      directiveScope.$digest();
+      expect($(currentElement).hasClass('.memeHover')).toBe(false);
     }));
   });
 });

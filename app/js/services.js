@@ -15,7 +15,6 @@ services.factory('Meme', [ function() {
   var _imageId = undefined;
 
   return {
-
     setMemes : function(memes) {
       var self = this;
       if (memes != 'null') {
@@ -115,7 +114,20 @@ services.factory('Meme', [ function() {
   };
 }]);
 
-services.factory('GetAllMemes', ['$q', '$http', function($q, $http) {
+services.factory('ParseMemeTypes',[ function() {
+  return {
+    parseMemeTypesWithoutData: function() {
+      return _.map(memeDataObject, function(object, key){ return object; });
+    },
+
+    parseMemeTypesWithData: function(data) {
+      return (data == "null" ? undefined : _.map(data, function(object, key){ return memeDataObject[key]; }));
+    }
+  }
+
+}]);
+
+services.factory('GetAllMemes', ['$q', '$http', 'ParseMemeTypes', function($q, $http, ParseMemeTypes) {
   return function() {
     var delay= $q.defer();
     $http (
@@ -124,7 +136,7 @@ services.factory('GetAllMemes', ['$q', '$http', function($q, $http) {
         url: "https://memefy.firebaseio.com/memes.json" 
       }
     ).success(function(data, status, headers, config) {
-      var returnData = (data == "null" ? undefined : _.map(data, function(num, key){ return key; }));
+      var returnData = ParseMemeTypes.parseMemeTypesWithData(data);
       delay.resolve(returnData);
     }).error(function(data, status, headers, config) {
         delay.reject('Unable to fetch memes');

@@ -1,5 +1,79 @@
 /* memefy css stylesheet */
 
+#canvas {
+  font-family: 'Open Sans', Sans-Serif;
+  font-weight: light;
+  position: relative;
+  width: 938px;
+  height: 558px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 5px solid #54585A;
+  background-color: #9BCBEB;
+}
+
+#canvasTitle {
+  position: relative;
+  left: 25px;
+  top: 5px;
+  width: 100px;
+  height: 25px;
+}
+
+#subCanvasTitle {
+  position: absolute;
+  right: 25px;
+  top: 5px;
+  width: 100px;
+  height: 25px;
+  text-align: right;
+}
+
+.allMemeTypes {
+  position: relative;
+  height: 500px;
+  width: 900px;
+  top: 13px;
+  left: 19px;
+}
+
+.createMemeTypes {
+  position: relative;
+  height: 112.5px;
+  width: 900px;
+  top: 0px;
+  left: 0px;
+}
+
+.memeCreateTypeImage {
+  position: relative;
+  float: left;
+  width: 112.5px;
+  height: 112.5px;
+}
+
+.memeDisplayTypeImage {
+  position: relative;
+  float: left;
+  width: 225px;
+  height: 250px;
+  border: 1px solid red;
+}
+
+.memeImage {
+  height: 100%;
+  width: 100%;
+}
+
+
+.domoAppHeader {
+  font-size: 30px;
+}
+
+.domoSubHeader {
+  font-size: 18px;
+}
+
 /*
 .menu {
   list-style: none;
@@ -30,3 +104,4 @@
   padding: 0;
 }
 */
+

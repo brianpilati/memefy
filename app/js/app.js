@@ -24,7 +24,7 @@ config(['$routeProvider', function($routeProvider) {
     templateUrl: 'partials/display.html', 
     controller: 'displayMemes',
     resolve: {
-      memeFactory: function(GetAllMemes) {
+      memeTypes: function(GetAllMemes) {
         return GetAllMemes();
       }
     }

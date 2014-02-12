@@ -83,7 +83,7 @@ describe('service', function() {
  
       mockBackend.flush();
  
-      expect(memes).toEqualData(['DosEquis', 'BurtReynolds']);
+      expect(memes).toEqualData(globalMemeTypes.slice(0,2));
    });
   });
 
@@ -289,8 +289,18 @@ describe('service', function() {
 
  
       expect(memeFactory.getMemes()).toEqualData(expectedMemes);
-      //expect(memeFactory.getMeme()).toEqualData(undefined);
-      //expect(memeFactory.getImageId()).toEqualData('DosEquis.jpg');
+    });
+  });
+
+  describe('ParseMemeTypes', function() {
+    var loader;
+    beforeEach(inject(function(ParseMemeTypes) {
+      loader = ParseMemeTypes;
+    }));
+   
+    it('should parse meme types', function() {
+      var returnMemes = loader.parseMemeTypesWithoutData();
+      expect(returnMemes).toEqualData(globalMemeTypes);
     });
   });
 });

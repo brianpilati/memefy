@@ -30,13 +30,23 @@ angular.module('memefy.directives', [])
     }
   };
 }])
-.directive('mfMemeTypesDisplay', [function() {
+.directive('mfMemeTypesDisplay', ['$location', function($location) {
   return {
     restrict: 'E',
     replace: true,
     transclude: false,
     templateUrl: 'partials/displayType.html',
-  }
+    link: function(scope, element, attrs) {
+      scope.viewClass = attrs.viewClass;
+      scope.memeMouseEnter = function() {
+        element.append("<div class='memeHover'>" + (scope.meme.title) + "</div>");
+      };
+
+      scope.memeMouseLeave = function() {
+        $(element).find('.memeHover').remove();
+      };
+    }
+  };
 }])
 .directive('mfMemeDisplay', [function() {
   return {
