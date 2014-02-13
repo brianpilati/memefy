@@ -13,7 +13,7 @@ describe('directives', function() {
     )
   );
 
-  var scope, element, template, memes, mockBackend, image, expectedMemes;
+  var scope, element, template, memes, mockBackend, image;
 
   beforeEach(function() {
     this.addMatchers({
@@ -27,24 +27,10 @@ describe('directives', function() {
     beforeEach(inject(function($compile, $rootScope, $templateCache, Meme) {
       template = $templateCache.get('app/partials/navigation.html');
       $templateCache.put('partials/navigation.html', template);
-      scope = $rootScope;
+      scope = $rootScope.$new();
       element = angular.element('<mf-navigation-buttons></mf-navigation-buttons>');
-      $compile(element)($rootScope);
-      memes = {
-        "DosEquis": {
-          "-adsfasdfasd1" : {lineOne: "1", lineTwo: "2"},
-          "-adsfasdfasd2" : {lineOne: "3", lineTwo: "4"},
-          "-adsfasdfasd3" : {lineOne: "5", lineTwo: "6"},
-          "-adsfasdfasd4" : {lineOne: "7", lineTwo: "8"},
-          "-adsfasdfasd5" : {lineOne: "9", lineTwo: "10"},
-          "-adsfasdfasd6" : {lineOne: "11", lineTwo: "12"},
-          "-adsfasdfasd7" : {lineOne: "13", lineTwo: "14"},
-          "-adsfasdfasd8" : {lineOne: "15", lineTwo: "16"}
-        }
-      };
-
-      expectedMemes = [{lineOne: '1', lineTwo: '2'}, {lineOne: '3', lineTwo: '4'}, {lineOne: '5', lineTwo: '6'}, {lineOne: '7', lineTwo: '8'}, {lineOne: '9', lineTwo: '10'}, {lineOne: '11', lineTwo: '12'}, {lineOne: '13', lineTwo: '14'}, {lineOne: '15', lineTwo: '16'}]; 
-      Meme.setMemes(memes);
+      $compile(element)(scope);
+      Meme.setMemes('DosEquis', globalNewDosEquisMemes);
     }));
 
     it('should be replaced', inject(function(Meme) {
@@ -86,7 +72,7 @@ describe('directives', function() {
 
       /*click left*/
       $(element).find('div.leftNavigation').click();
-      expect(Meme.getMemes()).toEqualData(expectedMemes.splice(0,7));
+      expect(Meme.getMemes()).toEqualData(expectedNewDosEquisMemes.splice(0,7));
 
       expect(scope.showRightNavigation).toBe(true);
       expect(scope.showLeftNavigation).toBe(false);
@@ -106,30 +92,18 @@ describe('directives', function() {
       element = angular.element('<mf-meme-display></mf-meme-display>');
       $compile(element)($rootScope);
 
-      memes = {
-        "DosEquis": {
-          "-adsfasdfasd1" : {lineOne: "1", lineTwo: "2"},
-          "-adsfasdfasd2" : {lineOne: "3", lineTwo: "4"},
-          "-adsfasdfasd3" : {lineOne: "5", lineTwo: "6"},
-          "-adsfasdfasd4" : {lineOne: "7", lineTwo: "8"},
-          "-adsfasdfasd5" : {lineOne: "9", lineTwo: "10"},
-          "-adsfasdfasd6" : {lineOne: "11", lineTwo: "12"},
-          "-adsfasdfasd7" : {lineOne: "13", lineTwo: "14"}
-        }
-      };
-
-      Meme.setMemes(memes);
+      Meme.setMemes('DosEquis', globalDosEquisMemes);
     }));
 
     it('should display the first meme', inject(function(Meme) {
       scope.memes = Meme.getMemes();
       scope.meme = Meme.getMeme();
-      scope.memeId = Meme.getImageId();
+      scope.image = Meme.getImageId();
       scope.$digest();
-      expect($(element).find('div.lineOne').html()).toBe('1');
-      expect($(element).find('div.lineTwo').html()).toBe('2');
+      expect($(element).find('div.memeLineOne').html()).toBe('1');
+      expect($(element).find('div.memeLineTwo').html()).toBe('2');
       expect($(element).find('img.memeImage').html()).toBe('');
-      expect($(element).find('img.memeImage').attr('src')).toBe('/img/DosEquis.jpg');
+      expect($(element).find('img.memeImage').attr('src')).toBe('/img/dosEquis.jpg');
     }));
   });
 

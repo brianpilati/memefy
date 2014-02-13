@@ -14,11 +14,17 @@ describe('service', function() {
     });
   });
 
+  describe('appName', function() {
+    it('should be Memefy', inject(function(appName) {
+      expect(appName).toBe("Memefy");
+    }));
+  });
+
   describe('Meme', function() {
     var memeFactory;
     beforeEach(inject(function(Meme) {
       memeFactory = Meme;
-      memeFactory.setMemes('null');
+      memeFactory.setMemes('DosEquis', 'null');
     }));
 
     it('should have no an undefined getMemes', function() {
@@ -46,6 +52,46 @@ describe('service', function() {
     });
   });
 
+  describe('Meme', function() {
+    var memeFactory;
+    beforeEach(inject(function(Meme) {
+      memeFactory = Meme;
+      memeFactory.setMemes('DosEquis', globalDosEquisMemes);
+    }));
+
+    it('should have memes', function() {
+      expect(memeFactory.getMemes()).toEqualData(expectedDosEquisMemes);
+    });
+
+    it('should have no an undefined getMeme()', function() {
+      expect(memeFactory.getMeme()).toEqualData(expectedDosEquisMeme);
+    });
+
+    it('should have no availableMemes', function() {
+      expect(memeFactory.isAvailableMemes()).toBe(true);
+    });
+
+    it('should have no left navigation', function() {
+      expect(memeFactory.showLeftNavigation()).toBe(false);
+    });
+
+    it('should have no right navigation', function() {
+      expect(memeFactory.showRightNavigation()).toBe(false);
+    });
+
+    it('should have memeImageId', function() {
+      expect(memeFactory.getImageId()).toBe('dosEquis.jpg');
+    });
+
+    it('should add a new mime', function() {
+      memeFactory.addMeme(newMeme);
+      expect(memeFactory.getMemes()).toEqualData(expectedDosEquisMemes);
+      expect(memeFactory.getMeme()).toEqualData(newMeme);
+      expect(memeFactory.showLeftNavigation()).toBe(false);
+      expect(memeFactory.showRightNavigation()).toBe(true);
+    });
+  });
+
   describe('GetAllMemes', function() {
     var mockBackend, loader;
     beforeEach(inject(function(_$httpBackend_, GetAllMemes) {
@@ -70,8 +116,7 @@ describe('service', function() {
     });
 
     it('should load memes', function() {
-      var returnMemes = {"DosEquis":{"-JFSOZT0vfPTc381tAsU":{"user":"9101","lineTwo":"6","lineOne":"5"},"-JFSOMEkprqcmHxOd2zd":{"user":"1234","lineTwo":"2","lineOne":"1"}},"BurtReynolds":{"-JFSOnHTnEWKGTbxU4Yv":{"user":"5678","lineTwo":"4","lineOne":"3"}}};
-      mockBackend.expectGET('https://memefy.firebaseio.com/memes.json').respond(returnMemes);
+      mockBackend.expectGET('https://memefy.firebaseio.com/memes.json').respond(globalReturnMemes);
  
       var memes;
       var promise = loader();
@@ -93,7 +138,7 @@ describe('service', function() {
       mockBackend = _$httpBackend_;
       loader = PersistMeme;
       memeFactory = Meme;
-      memeFactory.setMemes('null');
+      memeFactory.setMemes('DosEquis', 'null');
     }));
    
     it('should add one meme', function() {
@@ -118,26 +163,13 @@ describe('service', function() {
   });
 
   describe('PersistMeme', function() {
-    var mockBackend, loader, memeFactory, memes, meme, memeId, promise, expectedMemes;
+    var mockBackend, loader, memeFactory, meme, memeId, promise;
     beforeEach(inject(function(_$httpBackend_, PersistMeme, Meme) {
       mockBackend = _$httpBackend_;
       loader = PersistMeme;
-      memes = {
-        "DosEquis": {
-          "-adsfasdfasd1" : {lineOne: "1", lineTwo: "2"},
-          "-adsfasdfasd2" : {lineOne: "3", lineTwo: "4"},
-          "-adsfasdfasd3" : {lineOne: "5", lineTwo: "6"},
-          "-adsfasdfasd4" : {lineOne: "7", lineTwo: "8"},
-          "-adsfasdfasd5" : {lineOne: "9", lineTwo: "10"},
-          "-adsfasdfasd6" : {lineOne: "11", lineTwo: "12"},
-          "-adsfasdfasd7" : {lineOne: "13", lineTwo: "14"}
-        }
-      };
-
-      expectedMemes = [{lineOne: '1', lineTwo: '2'}, {lineOne: '3', lineTwo: '4'}, {lineOne: '5', lineTwo: '6'}, {lineOne: '7', lineTwo: '8'}, {lineOne: '9', lineTwo: '10'}, {lineOne: '11', lineTwo: '12'}, {lineOne: '13', lineTwo: '14'}];
 
       memeFactory = Meme;
-      memeFactory.setMemes(memes);
+      memeFactory.setMemes('DosEquis', globalDosEquisMemes);
       meme = {lineOne: "I usually don't test my code", lineTwo: "but when I do it is in production"};
       memeId = "DosEquis";
       promise = loader(memeId, meme);
@@ -148,7 +180,7 @@ describe('service', function() {
     }));
    
     it('should add one meme', function() {
-      var displayMemes = expectedMemes.slice(0);
+      var displayMemes = expectedDosEquisMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -159,7 +191,7 @@ describe('service', function() {
     });
 
     it('should browse right', function() {
-      var displayMemes = expectedMemes.slice(0);
+      var displayMemes = expectedDosEquisMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -174,7 +206,7 @@ describe('service', function() {
     });
 
     it('should browse right only once', function() {
-      var displayMemes = expectedMemes.slice(0);
+      var displayMemes = expectedDosEquisMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -193,7 +225,7 @@ describe('service', function() {
     });
 
     it('should browse left', function() {
-      var displayMemes = expectedMemes.slice(0);
+      var displayMemes = expectedDosEquisMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -212,7 +244,7 @@ describe('service', function() {
     });
 
     it('should browse left only once', function() {
-      var displayMemes = expectedMemes.slice(0);
+      var displayMemes = expectedDosEquisMemes.slice(0);
       mockBackend.flush();
 
       expect(memeFactory.getMemes()).toEqualData(displayMemes);
@@ -274,7 +306,7 @@ describe('service', function() {
     }));
    
     it('should load memes', function() {
-      var returnMemes = {"DosEquis":{"-JFSOZT0vfPTc381tAsU":{"user":"9101","lineTwo":"6","lineOne":"5"},"-JFSOMEkprqcmHxOd2zd":{"user":"1234","lineTwo":"2","lineOne":"1"}}};
+      var returnMemes = {"-JFSOZT0vfPTc381tAsU":{"user":"9101","lineTwo":"6","lineOne":"5"},"-JFSOMEkprqcmHxOd2zd":{"user":"1234","lineTwo":"2","lineOne":"1"}};
       var expectedMemes = [ { user : '9101', lineTwo : '6', lineOne : '5' }, { user : '1234', lineTwo : '2', lineOne : '1' } ];
       
       mockBackend.expectGET('https://memefy.firebaseio.com/memes/DosEquis.json').respond(returnMemes);

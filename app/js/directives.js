@@ -4,6 +4,15 @@
 
 
 angular.module('memefy.directives', [])
+.directive('displayName', ['appName', function(appName) {
+  return {
+    restrict: 'E',
+    replace: true,
+    link: function(scope, elm, attrs) {
+       elm.text(appName);
+    }
+  };
+}])
 .directive('mfNavigationButtons', ['Meme', function(Meme) {
   return {
     restrict: 'E',
@@ -39,7 +48,7 @@ angular.module('memefy.directives', [])
     link: function(scope, element, attrs) {
       scope.viewClass = attrs.viewClass;
       scope.memeMouseEnter = function() {
-        element.append("<div class='memeHover'>" + (scope.meme.title) + "</div>");
+        element.append("<div class='memeHover bg-info'>" + (scope.meme.title) + "</div>");
       };
 
       scope.memeMouseLeave = function() {

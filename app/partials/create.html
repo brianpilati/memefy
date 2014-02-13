@@ -1,9 +1,37 @@
-<div id="subCanvasTitle" class="domoSubHeader">Create</div>
+<div id="subCanvasTitle" class="domoSubHeader">{{pageName}}</div>
 <div class="allMemeTypes">
   <div class="createMemeTypes">
     <mf-meme-types-display 
-      ng-repeat='meme in memeTypes'
-      view-class='memeCreateTypeImage'>
+      ng-repeat="meme in memeTypes | filter: restrict ? 'appropriate' : ''"
+      view-class="memeCreateTypeImage">
     </mf-meme-types-display>
+  </div>
+  <div class="addMemeContainer">
+    <div class="addMemeMessage bg-info text-center domoSubHeader" ng-hide="createMeme">Please click on a Meme image to begin</div>
+    <div class="addMemeImageContainer" ng-animation="slide" ng-show="createMeme">
+      <img ng-src="/img/{{image}}--" class="addMemeImage"></img>
+      <div class="memeLineOne">{{lineOne}}</div>
+      <div class="memeLineTwo">{{lineTwo}}</div>
+    </div>
+    <div class="addMemeTextContainer" ng-show="createMeme">
+      <div class="innerForm">
+        <form role="form" name="memeForm">
+          <input type="hidden" ng-model="user" value="12345">
+          <div class="form-group has-feedback" ng-class="memeForm.lineOne.$invalid && !memeForm.lineOne.$dirty? 'has-error' : 'has-success'">
+            <label for="lineOne" class="control-label">Line One</label>
+            <input type="input" class="form-control" ng-model="lineOne" name="lineOne" placeholder="Line One" required>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-ok' : memeForm.lineOne.$valid}"></span> 
+          </div>
+          <div class="form-group has-feedback" ng-class="memeForm.lineTwo.$invalid && !memeForm.lineTwo.$dirty? 'has-error' : 'has-success'">
+            <label for="lineTwo" class="control-label">Line Two</label>
+            <input type="input" class="form-control" ng-model="lineTwo" name="lineTwo" placeholder="Line Two" required>
+            <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-ok' : memeForm.lineTwo.$valid}"></span> 
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-disabled="memeForm.$invalid" ng-click="save()">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

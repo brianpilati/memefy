@@ -1,18 +1,25 @@
 module.exports = function(config){
-    config.set({
+  config.set({
     basePath : '../',
 
     files : [
       'app/lib/angular/angular.js',
       'app/lib/angular/angular-*.js',
       'test/lib/angular/angular-mocks.js',
-      'test/unit/**/*.js',
-      'test/unit/artifacts/**/*.js',
       'app/js/**/*.js',
       'app/partials/**/*.html',
       'app/lib/jquery/jquery-1.11.0.min.js',
       'app/lib/underscore/underscore-min.js',
-      {pattern: 'app/img/*.jpg', included: false, served: true}
+      {pattern: 'app/img/*.jpg', included: false, served: true},
+      /* This needs to be last to overwrite some global variables */
+      'test/unit/**/*.js',
+      /*
+      If you ever want to just test limited code
+      'test/unit/servicesSpec.js',
+      'test/unit/directivesSpec.js',
+      'test/unit/controllersSpec.js',
+      */
+      'test/unit/artifacts/globalVariables.js'
     ],
 
     exclude : [

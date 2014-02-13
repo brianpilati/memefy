@@ -5,15 +5,24 @@
 describe('filter', function() {
   beforeEach(module('memefy.filters'));
 
+  var scope, element;
 
-  describe('interpolate', function() {
-    beforeEach(module(function($provide) {
-      $provide.value('version', 'TEST_VER');
+  describe('appropriate', function() {
+    beforeEach(inject(function($rootScope, $compile) {
+      scope = $rootScope.$new();
+      scope.memeTypes = globalMemeTypes;
+      scope.restrictAll = true;
+
+      element = angular.element('<div><div ng-Repeat="meme in memeTypes | filter: restrictAll ? \'appropriate\' : \'\'">' + 
+                  '{{meme.title}}' + 
+                 '</div></div>');
+      $compile(element)(scope);
     }));
 
-
-    it('should replace VERSION', inject(function(interpolateFilter) {
-      expect(interpolateFilter('before %VERSION% after')).toEqual('before TEST_VER after');
+    it('should limit the appropriate memes', inject(function() {
+      scope.$digest();
+      expect($(element.children('div')[0]).html()).toBe('Dos Equis');
+      expect($(element.find('div')[1]).html()).toBe(undefined);
     }));
   });
 });

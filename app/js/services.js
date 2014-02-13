@@ -7,6 +7,8 @@
 // In this case it is a simple value service.
 var services = angular.module('memefy.services', ['ngResource', 'ngRoute']);
 
+services.value('appName', 'Memefy');
+
 services.factory('Meme', [ function() {
   var _memes = [];
   var _memeDisplayCount = 7;
@@ -15,18 +17,13 @@ services.factory('Meme', [ function() {
   var _imageId = undefined;
 
   return {
-    setMemes : function(memes) {
+    setMemes : function(memeId, memes) {
       var self = this;
       if (memes != 'null') {
-        _memes = 
-        _.first(
-          _.map(memes, function(memeIdentifier, key) { 
-            self._setImageId(key);
-            return _.map(memeIdentifier, function(meme, key) { 
-              return meme; 
-            })
-          })
-        );
+        self._setImageId(memeDataObject[memeId].image);
+        _memes = _.map(memes, function(meme, key) { 
+          return meme; 
+        })
       }
     },
 
@@ -54,7 +51,7 @@ services.factory('Meme', [ function() {
     },
 
     getImageId: function() {
-      return (_imageId ? _imageId + ".jpg" : _imageId);
+      return (_imageId ? _imageId : _imageId);
     },
 
     clickRightNavigation : function() {
@@ -156,7 +153,7 @@ services.factory('GetAllMemesByType', ['$q', '$http', '$route', 'Meme', function
         url: "https://memefy.firebaseio.com/memes/" + memeId + ".json" 
       }
     ).success(function(data, status, headers, config) {
-      Meme.setMemes(data);
+      Meme.setMemes(memeId, data);
       delay.resolve(Meme);
     }).error(function(data, status, headers, config) {
         delay.reject('Unable to fetch memes by type');
