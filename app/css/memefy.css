@@ -20,9 +20,17 @@
 
 #canvasBody {
   position: absolute;
-  height: 500px;
+  height: 455px;
   width: 100%;
   top: 50px;
+  left: 0px;
+}
+
+#canvasFooter {
+  position: absolute;
+  height: 45px;
+  width: 100%;
+  bottom: 0px;
   left: 0px;
 }
 
@@ -52,11 +60,24 @@
   text-align: right;
 }
 
+#seeAllMemes {
+  position: absolute;
+  left: 10px;
+  top: 5px;
+}
+
+#createAMeme {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+
 .allMemeTypes {
   position: relative;
-  height: 500px;
+  height: 450px;
+  width: 910px;
   top: 0px;
-  left: 0px;
+  left: 10px;
 }
 
 .createMemeTypes {
@@ -77,24 +98,26 @@
 .memeDisplayTypeImage {
   position: relative;
   float: left;
-  width: 225px;
-  height: 250px;
+  width: 205px;
+  height: 205px;
+  margin: 10px;
 }
 
 .singleMeme {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 400px;
-  height: 500px;
+  width: 450px;
+  height: 450px;
+  font-size: 24px;
 }
 
 .allMemes {
   position: absolute;
-  left: 450px;
+  left: 500px;
   top: 0px;
-  width: 450px;
-  height: 500px;
+  width: 410px;
+  height: 410px;
   float: left;
 }
 
@@ -123,10 +146,12 @@
 }
 
 .allMemes .individualMeme {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  font-size: 2px;
+  position: relative;
+  width: 125px;
+  height: 125px;
+  font-size: 10px;
+  margin: 5px;
+  float: left;
 }
 
 .memeImage {
@@ -155,18 +180,18 @@
 
 .addMemeImageContainer {
   position: absolute;
-  height: 380px;
-  width: 448px;
+  top: 10px;
+  height: 305px;
+  width: 305px;
 }
 
 .memeLineOne {
   position: absolute;
   width: 100%;
   height: 50px;
-  top: 10px;
+  top: 0px;
   left: 0px;
   color: white;
-  font-size: 24px;
   text-align: center;
 }
 
@@ -177,13 +202,12 @@
   bottom: 10px;
   left: 0px;
   color: white;
-  font-size: 24px;
   text-align: center;
 }
 
 .addMemeImage {
-  width: 325px;
-  height: 325px;
+  width: 100%;
+  height: 100%;
 }
 
 .innerForm {
@@ -205,7 +229,7 @@
 .memeHover {
   position: absolute;
   top: 10px;
-  left: 10px;
+  left: 2px;
   height: 30px;
   width: 200px;
   text-align: center;

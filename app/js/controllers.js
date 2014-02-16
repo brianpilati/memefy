@@ -63,8 +63,16 @@ var memeDataObject = {
 /* Controllers */
 
 angular.module('memefy.controllers', [])
-  .controller('mainController', ['$scope', function($scope) {
+  .controller('mainController', ['$scope', '$location', function($scope, $location) {
      $scope.restrict = true;
+
+     $scope.seeAllMemes = function() {
+      $location.path("/");
+     }
+
+     $scope.createAMeme = function() {
+      $location.path("/create");
+     }
   }])
   .controller('displayMemesByType', ['$scope', '$location', 'memeFactory', function($scope, $location, memeFactory) {
     if (memeFactory.isAvailableMemes()) {

@@ -15,13 +15,24 @@ describe('controllers', function() {
   });
 
   describe('mainController', function() {
-    beforeEach(inject(function($controller, $rootScope) {
+    beforeEach(inject(function($controller, $rootScope, $location) {
       scope = $rootScope.$new();
       ctrl = $controller('mainController', { $scope: scope});
+      location = $location;
     }));
 
     it('should be restricted', function() {
       expect(scope.restrict).toBe(true);
+    });
+
+    it('should redirect to /', function() {
+      scope.seeAllMemes();
+      expect(location.path()).toBe('/');
+    });
+
+    it('should redirect to /create', function() {
+      scope.createAMeme();
+      expect(location.path()).toBe('/create');
     });
   });
 

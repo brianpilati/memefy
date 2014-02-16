@@ -1,6 +1,6 @@
 <div class="allMemeTypes">
   <mf-meme-types-display 
-    ng-repeat='meme in memeTypes'
+    ng-repeat="meme in memeTypes | filter: restrict ? 'appropriate' : ''"
     view-class='memeDisplayTypeImage'>
   </mf-meme-types-display>
 </div>
