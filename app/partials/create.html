@@ -19,12 +19,12 @@
           <input type="hidden" ng-model="user" value="12345">
           <div class="form-group has-feedback" ng-class="memeForm.lineOne.$invalid && !memeForm.lineOne.$dirty? 'has-error' : 'has-success'">
             <label for="lineOne" class="control-label">Line One</label>
-            <input type="input" class="form-control" ng-model="lineOne" name="lineOne" placeholder="Line One" required>
+            <input type="input" class="form-control" ng-model="lineOne" name="lineOne" placeholder="Line One" required maxlength="59">
             <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-ok' : memeForm.lineOne.$valid}"></span> 
           </div>
           <div class="form-group has-feedback" ng-class="memeForm.lineTwo.$invalid && !memeForm.lineTwo.$dirty? 'has-error' : 'has-success'">
             <label for="lineTwo" class="control-label">Line Two</label>
-            <input type="input" class="form-control" ng-model="lineTwo" name="lineTwo" placeholder="Line Two" required>
+            <input type="input" class="form-control" ng-model="lineTwo" name="lineTwo" placeholder="Line Two" required maxlength="59">
             <span class="glyphicon form-control-feedback" ng-class="{'glyphicon-ok' : memeForm.lineTwo.$valid}"></span> 
           </div>
           <div class="form-group">

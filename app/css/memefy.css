@@ -85,7 +85,7 @@
   height: 112.5px;
   width: 900px;
   top: 0px;
-  left: 13px;
+  left: 5px;
 }
 
 .memeCreateTypeImage {
@@ -105,7 +105,7 @@
 
 .singleMeme {
   position: absolute;
-  left: 0px;
+  left: 10px;
   top: 0px;
   width: 450px;
   height: 450px;
@@ -149,9 +149,42 @@
   position: relative;
   width: 125px;
   height: 125px;
-  font-size: 10px;
   margin: 5px;
   float: left;
+}
+
+.memeLineOne {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  line-height: 105%;
+  text-shadow: 2px 2px 0 #000;
+  font-size: 9.75px;
+}
+
+.memeLineTwo {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  line-height: 105%;
+  text-shadow: 2px 2px 0 #000;
+  font-size: 9.75px;
+}
+
+.singleMeme .individualMeme .memeLineOne, .singleMeme .individualMeme .memeLineTwo {
+  font-size: 35.5px;
+}
+
+.addMemeImageContainer .memeLineOne, .addMemeImageContainer .memeLineTwo {
+  font-size: 24px;
 }
 
 .memeImage {
@@ -164,7 +197,7 @@
   height: 385px;
   width: 900px;
   top: 0px;
-  left: 13px;
+  left: 0px;
 }
 
 .addMemeMessage {
@@ -183,26 +216,7 @@
   top: 10px;
   height: 305px;
   width: 305px;
-}
-
-.memeLineOne {
-  position: absolute;
-  width: 100%;
-  height: 50px;
-  top: 0px;
-  left: 0px;
-  color: white;
-  text-align: center;
-}
-
-.memeLineTwo {
-  position: absolute;
-  width: 100%;
-  height: 50px;
-  bottom: 10px;
-  left: 0px;
-  color: white;
-  text-align: center;
+  left: 75px;
 }
 
 .addMemeImage {

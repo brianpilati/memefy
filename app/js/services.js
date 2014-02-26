@@ -50,6 +50,11 @@ services.factory('Meme', [ function() {
       }
     },
 
+    setCurrentIndex: function(index) {
+      _currentMemeIndex = index;
+      return this.getMeme();
+    },
+
     getImageId: function() {
       return (_imageId ? _imageId : _imageId);
     },

@@ -84,6 +84,10 @@ angular.module('memefy.controllers', [])
     } else {
       $location.path('/display');
     }
+
+    $scope.switchMeme = function(memeIndex) {
+      $scope.meme = memeFactory.setCurrentIndex(memeIndex);
+    }
   }])
   .controller('displayMemes', ['$scope', '$location', 'memeTypes', function($scope, $location, memeTypes) {
     if (memeTypes) {

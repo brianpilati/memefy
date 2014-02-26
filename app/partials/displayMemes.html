@@ -1,9 +1,11 @@
 <div class="singleMeme">
-  <mf-meme-display
-    meme='meme'>
-  </mf-meme-display>
+  <mf-meme-display></mf-meme-display>
 </div>
 <div class="allMemes">
-  <mf-meme-display ng-repeat='meme in memes'></mf-meme-display>
+  <mf-meme-display 
+    ng-repeat='meme in memes'
+    index="{{$index}}"
+  >
+  </mf-meme-display>
   <mf-navigation-buttons></mf-navigation-buttons>
 </div>

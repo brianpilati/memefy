@@ -89,8 +89,8 @@ describe('directives', function() {
       template = $templateCache.get('app/partials/displayMeme.html');
       $templateCache.put('partials/displayMeme.html', template);
       scope = $rootScope;
-      element = angular.element('<mf-meme-display></mf-meme-display>');
-      $compile(element)($rootScope);
+      element = angular.element('<mf-meme-display show-Image="true"></mf-meme-display>');
+      $compile(element)(scope);
 
       Meme.setMemes('DosEquis', globalDosEquisMemes);
     }));
@@ -104,6 +104,14 @@ describe('directives', function() {
       expect($(element).find('div.memeLineTwo').html()).toBe('2');
       expect($(element).find('img.memeImage').html()).toBe('');
       expect($(element).find('img.memeImage').attr('src')).toBe('/img/dosEquis.jpg');
+    }));
+
+    it('should click on a meme and display it', inject(function(Meme) {
+      scope.memes = Meme.getMemes();
+      scope.meme = Meme.getMeme();
+      scope.image = Meme.getImageId();
+      scope.$digest();
+      $(element).click();
     }));
   });
 

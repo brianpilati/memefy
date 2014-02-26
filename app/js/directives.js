@@ -57,11 +57,18 @@ angular.module('memefy.directives', [])
     }
   };
 }])
-.directive('mfMemeDisplay', [function() {
+.directive('mfMemeDisplay', ['Meme', function(Meme) {
   return {
     restrict: 'E',
     replace: true,
     transclude: false,
-    templateUrl: 'partials/displayMeme.html'
+    templateUrl: 'partials/displayMeme.html',
+    link: function(scope, element, attrs) {
+      scope.showLargeImage = function() {
+        if (attrs.index) {
+          scope.switchMeme(attrs.index);
+        }
+      }
+    }
   }
 }]);
