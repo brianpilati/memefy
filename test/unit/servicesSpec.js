@@ -50,6 +50,10 @@ describe('service', function() {
     it('should have no memeImageId', function() {
       expect(memeFactory.getImageId()).toBe(undefined);
     });
+
+    it('should have no meme on setCurrentIndex', function() {
+      expect(memeFactory.setCurrentIndex(0)).toEqualData(undefined);
+    });
   });
 
   describe('Meme', function() {
@@ -79,6 +83,14 @@ describe('service', function() {
       expect(memeFactory.showRightNavigation()).toBe(false);
     });
 
+    it('should have the first meme on setCurrentIndex', function() {
+      expect(memeFactory.setCurrentIndex(0)).toEqualData(expectedDosEquisMeme);
+    });
+
+    it('should have current meme on setCurrentIndex at an index that is too high', function() {
+      expect(memeFactory.setCurrentIndex(8)).toEqualData(expectedDosEquisMeme);
+    });
+
     it('should have memeImageId', function() {
       expect(memeFactory.getImageId()).toBe('dosEquis.jpg');
     });
@@ -89,6 +101,12 @@ describe('service', function() {
       expect(memeFactory.getMeme()).toEqualData(newMeme);
       expect(memeFactory.showLeftNavigation()).toBe(false);
       expect(memeFactory.showRightNavigation()).toBe(true);
+    });
+
+    it('should have the first meme on setCurrentIndex', function() {
+      memeFactory.addMeme(newMeme);
+      memeFactory.clickRightNavigation();
+      expect(memeFactory.setCurrentIndex(0)).toEqualData(newMeme);
     });
   });
 

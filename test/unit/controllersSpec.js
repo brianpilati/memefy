@@ -47,7 +47,7 @@ describe('controllers', function() {
       ctrl = $controller('displayMemesByType', { $scope: scope, 'location': location, 'memeFactory' : meme});
     }));
 
-    it('should redirect to the display page', function() {
+    it('should redirect to the display page if there are no Memes', function() {
       expect(location.path()).toBe('/display');
     });
   });
@@ -81,8 +81,10 @@ describe('controllers', function() {
        expect(scope.showLeftNavigation).toBe(false);
     });
 
-    it('should have an image', function() {
-       expect(scope.image).toBe('dosEquis.jpg');
+    it('should call Meme.setCurrentIndex when called', function() {
+      spyOn(meme, 'setCurrentIndex');
+      scope.switchMeme()
+      expect(meme.setCurrentIndex).toHaveBeenCalled();
     });
   });
 

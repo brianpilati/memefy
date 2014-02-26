@@ -51,7 +51,10 @@ services.factory('Meme', [ function() {
     },
 
     setCurrentIndex: function(index) {
-      _currentMemeIndex = index;
+      var tempCurrentMemeIndex = index + this._getCurrentCounter();
+      if (tempCurrentMemeIndex <= this._getUpperBound()) {
+        _currentMemeIndex = index + this._getCurrentCounter();
+      }
       return this.getMeme();
     },
 

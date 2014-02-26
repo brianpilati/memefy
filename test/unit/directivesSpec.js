@@ -37,8 +37,8 @@ describe('directives', function() {
       scope.showLeftNavigation=false;
       scope.showRightNavigation=false;
       scope.$digest();
-      expect($(element).find('div.leftNavigation').hasClass('ng-hide')).toBe(true);
-      expect($(element).find('div.rightNavigation').hasClass('ng-hide')).toBe(true);
+      expect($(element).find('div.memeChevronLeft').hasClass('ng-hide')).toBe(true);
+      expect($(element).find('div.memeChevronRight').hasClass('ng-hide')).toBe(true);
     }));
 
     it('should browse right', inject(function(Meme) {
@@ -46,11 +46,11 @@ describe('directives', function() {
       scope.showRightNavigation=true;
       
       scope.$digest();
-      expect($(element).find('div.leftNavigation').hasClass('ng-hide')).toBe(true);
-      expect($(element).find('div.rightNavigation').hasClass('ng-hide')).toBe(false);
+      expect($(element).find('div.memeChevronLeft').hasClass('ng-hide')).toBe(true);
+      expect($(element).find('div.memeChevronRight').hasClass('ng-hide')).toBe(false);
 
       /*click right*/
-      $(element).find('div.rightNavigation').click();
+      $(element).find('div.memeChevronRight').click();
       expect(Meme.getMemes()).toEqualData([ { lineOne : '15', lineTwo : '16' } ]);
 
       expect(scope.showRightNavigation).toBe(false);
@@ -58,8 +58,8 @@ describe('directives', function() {
 
       scope.$digest();
 
-      expect($(element).find('div.leftNavigation').hasClass('ng-hide')).toBe(true);
-      expect($(element).find('div.rightNavigation').hasClass('ng-hide')).toBe(false);
+      expect($(element).find('div.memeChevronLeft').hasClass('ng-hide')).toBe(true);
+      expect($(element).find('div.memeChevronRight').hasClass('ng-hide')).toBe(false);
     }));
 
     it('should browse left', inject(function(Meme) {
@@ -67,11 +67,11 @@ describe('directives', function() {
       scope.showLeftNavigation=true;
 
       scope.$digest();
-      expect($(element).find('div.leftNavigation').hasClass('ng-hide')).toBe(false);
-      expect($(element).find('div.rightNavigation').hasClass('ng-hide')).toBe(true);
+      expect($(element).find('div.memeChevronLeft').hasClass('ng-hide')).toBe(false);
+      expect($(element).find('div.memeChevronRight').hasClass('ng-hide')).toBe(true);
 
       /*click left*/
-      $(element).find('div.leftNavigation').click();
+      $(element).find('div.memeChevronLeft').click();
       expect(Meme.getMemes()).toEqualData(expectedNewDosEquisMemes.splice(0,7));
 
       expect(scope.showRightNavigation).toBe(true);
@@ -79,8 +79,8 @@ describe('directives', function() {
 
       scope.$digest();
 
-      expect($(element).find('div.leftNavigation').hasClass('ng-hide')).toBe(false);
-      expect($(element).find('div.rightNavigation').hasClass('ng-hide')).toBe(true);
+      expect($(element).find('div.memeChevronLeft').hasClass('ng-hide')).toBe(false);
+      expect($(element).find('div.memeChevronRight').hasClass('ng-hide')).toBe(true);
     }));
   });
 
@@ -89,7 +89,8 @@ describe('directives', function() {
       template = $templateCache.get('app/partials/displayMeme.html');
       $templateCache.put('partials/displayMeme.html', template);
       scope = $rootScope;
-      element = angular.element('<mf-meme-display show-Image="true"></mf-meme-display>');
+      scope.switchMeme = function() {};
+      element = angular.element('<mf-meme-display index="1"></mf-meme-display>');
       $compile(element)(scope);
 
       Meme.setMemes('DosEquis', globalDosEquisMemes);
@@ -107,11 +108,13 @@ describe('directives', function() {
     }));
 
     it('should click on a meme and display it', inject(function(Meme) {
+      spyOn(scope, 'switchMeme');
       scope.memes = Meme.getMemes();
       scope.meme = Meme.getMeme();
       scope.image = Meme.getImageId();
       scope.$digest();
-      $(element).click();
+      scope.showLargeImage();
+      expect(scope.switchMeme).toHaveBeenCalled();
     }));
   });
 
