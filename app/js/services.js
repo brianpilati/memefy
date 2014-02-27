@@ -51,9 +51,9 @@ services.factory('Meme', [ function() {
     },
 
     setCurrentIndex: function(index) {
-      var tempCurrentMemeIndex = index + this._getCurrentCounter();
+      var tempCurrentMemeIndex = (parseInt(index) + this._getCurrentCounter());
       if (tempCurrentMemeIndex <= this._getUpperBound()) {
-        _currentMemeIndex = index + this._getCurrentCounter();
+        _currentMemeIndex = tempCurrentMemeIndex;
       }
       return this.getMeme();
     },
@@ -101,7 +101,7 @@ services.factory('Meme', [ function() {
     },
 
     _getCurrentCounter: function() {
-      return _currentMemeCounter * _memeDisplayCount;
+      return parseInt(_currentMemeCounter * _memeDisplayCount);
     },
 
     _getLowerBound: function() {

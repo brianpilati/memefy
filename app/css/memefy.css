@@ -1,7 +1,8 @@
 /* memefy css stylesheet */
 
 #canvas {
-  font-family: 'Open Sans', Sans-Serif;
+  /*font-family: 'Open Sans', Sans-Serif;*/
+  font-family: Impact;
   font-weight: light;
   position: relative;
   width: 938px;
@@ -156,7 +157,7 @@
 }
 
 .singleMeme .individualMeme .memeLineOne, .singleMeme .individualMeme .memeLineTwo {
-  font-size: 35.5px;
+  font-size: 34.5px;
 }
 
 .addMemeImageContainer .memeLineOne, .addMemeImageContainer .memeLineTwo {
