@@ -1,8 +1,7 @@
 /* memefy css stylesheet */
 
 #canvas {
-  /*font-family: 'Open Sans', Sans-Serif;*/
-  font-family: Impact;
+  font-family: 'Open Sans', Sans-Serif;
   font-weight: light;
   position: relative;
   width: 938px;
@@ -111,6 +110,7 @@
   width: 450px;
   height: 450px;
   font-size: 24px;
+  font-family: Impact;
 }
 
 .allMemes {
@@ -141,6 +141,7 @@
   line-height: 105%;
   text-shadow: 2px 2px 0 #000;
   font-size: 9.75px;
+  font-family: Impact;
 }
 
 .memeLineTwo {
@@ -154,13 +155,16 @@
   line-height: 105%;
   text-shadow: 2px 2px 0 #000;
   font-size: 9.75px;
+  font-family: Impact;
 }
 
 .singleMeme .individualMeme .memeLineOne, .singleMeme .individualMeme .memeLineTwo {
+  font-family: Impact;
   font-size: 34.5px;
 }
 
 .addMemeImageContainer .memeLineOne, .addMemeImageContainer .memeLineTwo {
+  font-family: Impact;
   font-size: 24px;
 }
 
